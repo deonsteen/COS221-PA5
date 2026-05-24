@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../db.php';
 require_once __DIR__ . '/../auth.php';
 requireRole('traveller');
-$u  = currentUser();
+$u = currentUser();
 $db = getDB();
 
 
@@ -206,7 +206,8 @@ function destIcon(string $dest, array $icons): string
                                     </div>
                                     <div style="text-align:right">
                                         <div style="font-size:18px; font-weight:700; color:var(--teal)">
-                                            <?= countdown((int) $trip['DaysUntil']) ?></div>
+                                            <?= countdown((int) $trip['DaysUntil']) ?>
+                                        </div>
                                         <span
                                             class="pack-badge badge-<?= strtolower($trip['Class']) ?>"><?= $trip['Class'] ?></span>
                                     </div>
@@ -246,9 +247,11 @@ function destIcon(string $dest, array $icons): string
                                     <tr>
                                         <td><?= htmlspecialchars($p['PackName']) ?></td>
                                         <td><?= destIcon($p['Destination'], $destIcons) ?>
-                                            <?= htmlspecialchars($p['Destination']) ?></td>
+                                            <?= htmlspecialchars($p['Destination']) ?>
+                                        </td>
                                         <td class="text-sm text-muted"><?= date('d M Y', strtotime($p['From'])) ?> –
-                                            <?= date('d M Y', strtotime($p['To'])) ?></td>
+                                            <?= date('d M Y', strtotime($p['To'])) ?>
+                                        </td>
                                         <td><span
                                                 class="pack-badge badge-<?= strtolower($p['Class']) ?>"><?= $p['Class'] ?></span>
                                         </td>
