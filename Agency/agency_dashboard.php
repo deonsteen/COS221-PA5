@@ -10,7 +10,7 @@ if (!isset($_SESSION['AgentID']) || $_SESSION['role'] !== 'agency') {
 }
 
 // ── DB connection ──
-require_once '../includes/db.php'; // adjust path to your db connection file
+require_once '../db.php'; // adjust path to your db connection file
 
 $agentID    = (int) $_SESSION['AgentID'];
 $agencyName = htmlspecialchars($_SESSION['AgencyName'] ?? 'Your Agency');
