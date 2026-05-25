@@ -12,8 +12,8 @@ $u = currentUser();
       class="<?= $currentPage === 'destinations.php' ? 'active' : '' ?>">Destinations</a>
     <a href="/COS221-PA5/traveller/bookings.php" class="<?= $currentPage === 'bookings.php' ? 'active' : '' ?>">My
       Bookings</a>
-    <a href="/COS221-PA5/traveller/profile.php"
-      class="<?= $currentPage === 'profile.php' ? 'active' : '' ?>"><?= htmlspecialchars($u['username']) ?></a>
+    <a href="/COS221-PA5/traveller/Traveller_Profile.php"
+      class="<?= $currentPage === 'Traveller_Profile.php' ? 'active' : '' ?>"><?= htmlspecialchars($u['username']) ?></a>
     <a href="/COS221-PA5/logout.php" class="btn-nav">Sign Out</a>
   </div>
 </nav>
