@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 require_once '../db.php';
+$pdo = getDB();
 
 $agentID = (int) $_SESSION['AgentID'];
 $packID  = isset($_POST['PackID']) ? (int) $_POST['PackID'] : 0;

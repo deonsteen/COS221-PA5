@@ -8,6 +8,7 @@ if (!isset($_SESSION['AgentID']) || $_SESSION['role'] !== 'agency') {
 }
 
 require_once '../db.php';
+$pdo = getDB();
 
 $agentID    = (int) $_SESSION['AgentID'];
 $agencyName = htmlspecialchars($_SESSION['AgencyName'] ?? 'Your Agency');
