@@ -67,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $role     = in_array($_POST['role'] ?? '', ['traveller','agency']) ? $_POST['role'] : 'traveller';
         $name     = trim($_POST['name'] ?? '');
         $dob      = trim($_POST['dob'] ?? '');
+        $phone    = trim($_POST['phone'] ?? '');
  
         if (!$username || !$password || !$email) {
             $error = 'Username, email and password are required.';
@@ -82,30 +83,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db = null;
             try {
                 $db   = getDB();
-                $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
-                $db->beginTransaction();
-                $stmt = $db->prepare("INSERT INTO users (Username, Password) VALUES (?, ?)");
-                $stmt->execute([$username, $hash]);
-                $uid = $db->lastInsertId();
-                $db->prepare("INSERT INTO contactdetails (UserID, Email) VALUES (?, ?)")
-                   ->execute([$uid, $email]);
-                if ($role === 'traveller') {
-                    $db->prepare("INSERT INTO travellers (UserID, DoB) VALUES (?, ?)")
-                       ->execute([$uid, $dob]);
+
+                $check = $db->prepare("SELECT UserID FROM users WHERE Username = ?");
+                $check->execute([$username]);
+
+                if ($check->fetch()) {
+                    $error = 'That username is already taken.';
                 } else {
-                    $db->prepare("INSERT INTO agencies (UserID, Name) VALUES (?, ?)")
-                       ->execute([$uid, $name]);
+                  $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+                  $db->beginTransaction();
+
+                  $db->prepare("INSERT INTO users (Username, Password) VALUES (?, ?)")
+                    ->execute([$username, $hash]);
+                  $uid = $db->lastInsertId();
+
+                  $db->prepare("INSERT INTO contactdetails (UserID, Email) VALUES (?, ?)")
+                    ->execute([$uid, $email]);
+                  $cdid = $db->lastInsertId();
+
+                  $phoneType = ($role === 'agency') ? 'Work' : 'Mobile';
+                  $phoneVal  = $phone ?: ($role === 'agency' ? '+000000000000' : '+000000000000');
+                  $db->prepare("INSERT INTO contact_numbers (CDID, Number, Type) VALUES (?, ?, ?)")
+                    ->execute([$cdid, $phoneVal, $phoneType]);
+
+                  if ($role === 'traveller') {
+                      $db->prepare("INSERT INTO travellers (UserID, DoB) VALUES (?, ?)")
+                        ->execute([$uid, $dob]);
+                  } else {
+                      $db->prepare("INSERT INTO agencies (UserID, Name) VALUES (?, ?)")
+                        ->execute([$uid, $name]);
+                  }
+
+                  $db->commit();
+                  $success = 'Account created successfully! Please sign in.';
+                  $mode    = 'login';
+
                 }
-                $db->commit();
-                $success = 'Account created successfully! Please sign in.';
-                $mode    = 'login';
-            } catch (PDOException $e) {
+              } catch (PDOException $e) {
                 if ($db) $db->rollBack();
+                error_log('Registration error: ' . $e->getMessage());
                 $error = 'DB Error: ' . $e->getMessage();
-            }
+              }
         }
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -216,6 +238,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <label>Email *</label>
         <input class="form-control" type="email" name="email" required>
       </div>
+      <div class="form-group">
+        <label>Phone Number <span class="text-muted text-sm"></label>
+        <input class="form-control" type="tel" name="phone" maxlength="20" placeholder="+27811234567">
+    </div>
       <div class="form-group" id="field-dob">
         <label>Date of Birth *</label>
         <input class="form-control" type="date" name="dob" max="<?= date('Y-m-d', strtotime('-18 years')) ?>">
