@@ -132,7 +132,7 @@ function destEmoji(string $dest): string {
 </nav>
 
 <!-- ══════════════════════════════════════════
-     LAYOUT
+LAYOUT
 ══════════════════════════════════════════ -->
 <div class="dashboard-layout">
 
