@@ -4,6 +4,9 @@ require_once __DIR__ . '/../auth.php';
 requireRole('traveller');
 $db = getDB();
 
+// All packages for dropdown
+$allPkgs = $db->query("SELECT p.PackID, pi.Name, pi.Destination FROM packages p JOIN packinfo pi ON pi.PackID = p.PackID ORDER BY pi.Name")->fetchAll();
+
 // IDs come from URL (added server-side via GET) or from JS sessionStorage via hidden field
 $ids = [];
 if (isset($_GET['ids'])) {
@@ -100,12 +103,17 @@ if ($ids) {
     <form method="GET" id="compareForm"
       style="margin-bottom:20px; display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap">
       <div class="form-group" style="margin:0">
-        <label>Add Package ID</label>
-        <input class="form-control" type="number" id="addId" placeholder="Package ID">
+        <label>Select Package</label>
+        <select class="form-control" id="addPackage">
+          <option value="">Choose a package…</option>
+          <?php foreach ($allPkgs as $p): ?>
+            <option value="<?= $p['PackID'] ?>"><?= htmlspecialchars($p['Name']) ?> — <?= htmlspecialchars($p['Destination']) ?></option>
+          <?php endforeach; ?>
+        </select>
       </div>
+      <input type="hidden" name="ids" id="idsField" value="<?= htmlspecialchars(implode(',', $ids)) ?>">
       <button type="button" onclick="addToCompare()" class="btn btn-outline">Add</button>
       <button type="button" onclick="clearCompare()" class="btn btn-danger btn-sm">Clear All</button>
-      <input type="hidden" name="ids" id="idsField" value="<?= htmlspecialchars(implode(',', $ids)) ?>">
       <button type="submit" class="btn btn-primary">Compare</button>
     </form>
 
@@ -209,7 +217,7 @@ if ($ids) {
     function syncForm() { document.getElementById('idsField').value = getIds().join(','); }
 
     function addToCompare() {
-      const id = document.getElementById('addId').value.trim();
+      const id = document.getElementById('addPackage').value;
       if (!id) return;
       let ids = getIds();
       if (!ids.includes(id)) ids.push(id);
