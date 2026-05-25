@@ -2,7 +2,7 @@
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'tripistry');
 define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_PASS', 'Toll@bones15!!');
  
 function getDB(): PDO {
     static $pdo = null;

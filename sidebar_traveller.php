@@ -19,6 +19,10 @@
     class="<?= $currentPage === 'restaurants.php' ? 'active' : '' ?>">🍽️ Restaurants</a>
   <a href="/COS221-PA5/traveller/bookings.php"
     class="<?= $currentPage === 'bookings.php' ? 'active' : '' ?>">📋 My Bookings</a>
+  <a href="/COS221-PA5/traveller/past_bookings.php"
+    class="<?= $currentPage === 'past_bookings.php' ? 'active' : '' ?>">📜 Past Bookings</a>
+  <a href="/COS221-PA5/traveller/reviews.php"
+    class="<?= $currentPage === 'reviews.php' ? 'active' : '' ?>">⭐ Reviews</a>
   <a href="/COS221-PA5/traveller/profile.php"
     class="<?= $currentPage === 'profile.php' ? 'active' : '' ?>">👤 Profile</a>
 </div>

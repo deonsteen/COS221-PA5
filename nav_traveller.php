@@ -14,6 +14,6 @@ $u = currentUser();
       Bookings</a>
     <a href="/COS221-PA5/traveller/profile.php"
       class="<?= $currentPage === 'profile.php' ? 'active' : '' ?>"><?= htmlspecialchars($u['username']) ?></a>
-    <a href="/COS221-PA5/logout.php" class="btn-nav">Sign Out</a>
+    <a href="/COS221-PA5/logout.php" >Sign Out</a>
   </div>
 </nav>
