@@ -6,6 +6,8 @@ if (!isset($_SESSION['sub_id']) || $_SESSION['role'] !== 'agency') {
     exit;
 }
 
+// ── DB connection ──
+
 require_once '../db.php';
 $pdo = getDB();
 

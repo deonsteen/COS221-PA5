@@ -48,10 +48,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $_SESSION['sub_id'] = $trav['TravID'];
                         header('Location: traveller/dashboard.php');
                     } else {
-                        $_SESSION['role']   = 'agency';
-                        $_SESSION['sub_id'] = $ag['AgentID'];
-                        header('Location: agency/dashboard.php');
-                    }
+                        $_SESSION['role']      = 'agency';
+                        $_SESSION['AgentID']   = $ag['AgentID'];
+                        $_SESSION['sub_id']    = $ag['AgentID'];
+
+                        // Fetch agency name
+                        $nameStmt = $db->prepare("SELECT Name FROM agencies WHERE AgentID = ?");
+                        $nameStmt->execute([$ag['AgentID']]);
+                        $agencyRow = $nameStmt->fetch();
+                        $_SESSION['AgencyName'] = $agencyRow['Name'] ?? 'Agency';
+
+                        header('Location: Agency/agency_dashboard.php');
+                      }
                     exit;
                 }
             } else {
