@@ -4,7 +4,7 @@
 
 session_start();
 
-if (!isset($_SESSION['AgentID']) || $_SESSION['role'] !== 'agency') {
+if (!isset($_SESSION['sub_id']) || $_SESSION['role'] !== 'agency') {
     header('Location: ../login.php');
     exit;
 }
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 require_once '../db.php';
 $pdo = getDB();
 
-$agentID    = (int) $_SESSION['AgentID'];
+$agentID    = (int) $_SESSION['sub_id'];
 $discountID = isset($_POST['DiscountID']) ? (int) $_POST['DiscountID'] : 0;
 
 if ($discountID <= 0) {

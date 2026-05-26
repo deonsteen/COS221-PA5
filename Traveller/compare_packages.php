@@ -4,12 +4,15 @@ require_once __DIR__ . '/../auth.php';
 requireRole('traveller');
 $db = getDB();
 
+// All packages for dropdown
+$allPkgs = $db->query("SELECT p.PackID, pi.Name, pi.Destination FROM packages p JOIN packinfo pi ON pi.PackID = p.PackID ORDER BY pi.Name")->fetchAll();
+
 // IDs come from URL (added server-side via GET) or from JS sessionStorage via hidden field
 $ids = [];
 if (isset($_GET['ids'])) {
   foreach (explode(',', $_GET['ids']) as $id) {
     $v = filter_var(trim($id), FILTER_VALIDATE_INT);
-    if ($v)
+    if ($v !== false)
       $ids[] = $v;
   }
 }
@@ -28,7 +31,7 @@ if ($ids) {
         JOIN packinfo pi  ON pi.PackID  = p.PackID
         JOIN agencies ag  ON ag.AgentID = p.AgentID
         LEFT JOIN agency_experiences ae ON ae.AgentID = p.AgentID
-        LEFT JOIN discounts d ON d.PackID = p.PackID AND CURDATE() BETWEEN d.`From` AND d.`To`
+        LEFT JOIN discounts d ON d.DiscountID = (SELECT DiscountID FROM discounts WHERE PackID = p.PackID AND CURDATE() BETWEEN `From` AND `To` LIMIT 1)
         WHERE p.PackID IN ($placeholders)
         GROUP BY p.PackID
     ");
@@ -86,9 +89,11 @@ if ($ids) {
 
 <body>
   <?php include __DIR__ . '/../nav_traveller.php'; ?>
-  <?php include __DIR__ . '/../sidebar_traveller.php'; ?>
 
   <div class="container page-wrap">
+    <div class="sidebar-layout">
+      <?php include __DIR__ . '/../sidebar_traveller.php'; ?>
+      <div>
     <div class="page-header">
       <h1>Compare Packages</h1>
       <p>Compare up to 3 packages side by side.</p>
@@ -98,12 +103,17 @@ if ($ids) {
     <form method="GET" id="compareForm"
       style="margin-bottom:20px; display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap">
       <div class="form-group" style="margin:0">
-        <label>Add Package ID</label>
-        <input class="form-control" type="number" id="addId" placeholder="Package ID">
+        <label>Select Package</label>
+        <select class="form-control" id="addPackage">
+          <option value="">Choose a package…</option>
+          <?php foreach ($allPkgs as $p): ?>
+            <option value="<?= $p['PackID'] ?>"><?= htmlspecialchars($p['Name']) ?> — <?= htmlspecialchars($p['Destination']) ?></option>
+          <?php endforeach; ?>
+        </select>
       </div>
+      <input type="hidden" name="ids" id="idsField" value="<?= htmlspecialchars(implode(',', $ids)) ?>">
       <button type="button" onclick="addToCompare()" class="btn btn-outline">Add</button>
       <button type="button" onclick="clearCompare()" class="btn btn-danger btn-sm">Clear All</button>
-      <input type="hidden" name="ids" id="idsField" value="<?= htmlspecialchars(implode(',', $ids)) ?>">
       <button type="submit" class="btn btn-primary">Compare</button>
     </form>
 
@@ -116,10 +126,10 @@ if ($ids) {
       // Find best price and duration
       $prices = array_column($packages, 'Price');
       $durations = array_column($packages, 'Duration');
-      $ratings = array_column($packages, 'AgencyRating');
+      $ratings = array_filter(array_column($packages, 'AgencyRating'), fn($r) => $r !== null);
       $minPrice = min($prices);
       $minDur = min($durations);
-      $maxRat = max($ratings);
+      $maxRat = $ratings ? max($ratings) : null;
       ?>
 
       <div style="overflow-x:auto">
@@ -169,11 +179,11 @@ if ($ids) {
             <tr>
               <td class="row-label">Agency Rating</td>
               <?php foreach ($packages as $pkg): ?>
-                <td class="<?= $pkg['AgencyRating'] == $maxRat ? 'best' : '' ?>">
+                <td class="<?= ($maxRat !== null && $pkg['AgencyRating'] !== null && abs($pkg['AgencyRating'] - $maxRat) < 0.01) ? 'best' : '' ?>">
                   <?php if ($pkg['AgencyRating']): ?>
                     <span
                       class="stars"><?= str_repeat('★', round($pkg['AgencyRating'])) . str_repeat('☆', 5 - round($pkg['AgencyRating'])) ?></span>
-                    <?= $pkg['AgencyRating'] ?>/5 <?= $pkg['AgencyRating'] == $maxRat ? ' 🏆 Top rated' : '' ?>
+                    <?= $pkg['AgencyRating'] ?>/5 <?= ($maxRat !== null && abs($pkg['AgencyRating'] - $maxRat) < 0.01) ? ' 🏆 Top rated' : '' ?>
                   <?php else: ?><span class="text-muted">No reviews</span><?php endif; ?>
                 </td>
               <?php endforeach; ?>
@@ -197,6 +207,8 @@ if ($ids) {
         </table>
       </div>
     <?php endif; ?>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -205,7 +217,7 @@ if ($ids) {
     function syncForm() { document.getElementById('idsField').value = getIds().join(','); }
 
     function addToCompare() {
-      const id = document.getElementById('addId').value.trim();
+      const id = document.getElementById('addPackage').value;
       if (!id) return;
       let ids = getIds();
       if (!ids.includes(id)) ids.push(id);

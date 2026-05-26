@@ -4,7 +4,7 @@ require_once __DIR__ . '/db.php';
 require_once __DIR__ . '/auth.php';
  
 if (isLoggedIn()) {
-    header('Location: ' . ($_SESSION['role'] === 'agency' ? 'agency/dashboard.php' : 'traveller/dashboard.php'));
+    header('Location: ' . ($_SESSION['role'] === 'agency' ? 'Agency/agency_dashboard.php' : 'traveller/dashboard.php'));
     exit;
 }
  
