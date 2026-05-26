@@ -1,19 +1,18 @@
-<?php
-// agency/agency_dashboard.php
-
+<<?php
 session_start();
 
-// ── Auth guard: only agents can access this page ──
-if (!isset($_SESSION['AgentID']) || $_SESSION['role'] !== 'agency') {
+if (!isset($_SESSION['sub_id']) || $_SESSION['role'] !== 'agency') {
     header('Location: ../login.php');
     exit;
 }
 
-// ── DB connection ──
-require_once '../includes/db.php'; // adjust path to your db connection file
+require_once '../db.php';
+$pdo = getDB();
 
-$agentID    = (int) $_SESSION['AgentID'];
-$agencyName = htmlspecialchars($_SESSION['AgencyName'] ?? 'Your Agency');
+$agentID    = (int) $_SESSION['sub_id'];
+$stmtName = $pdo->prepare("SELECT Name FROM agencies WHERE AgentID = ?");
+$stmtName->execute([$agentID]);
+$agencyName = htmlspecialchars($stmtName->fetchColumn() ?: 'Your Agency');
 
 // ── Initials for avatar ──
 $words    = explode(' ', $agencyName);
@@ -132,7 +131,7 @@ function destEmoji(string $dest): string {
 </nav>
 
 <!-- ══════════════════════════════════════════
-     LAYOUT
+LAYOUT
 ══════════════════════════════════════════ -->
 <div class="dashboard-layout">
 
