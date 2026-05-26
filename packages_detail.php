@@ -12,7 +12,7 @@ if (!$packId) { header('Location: packages.php'); exit; }
 $stmt = $db->prepare("
     SELECT p.PackID, p.Price, p.AgentID,
            pi.InfoID, pi.Name, pi.Destination, pi.Duration, pi.Class,
-           ag.Name AS AgencyName, ag.AgentID,
+           ag.Name AS AgencyName,
            ROUND(AVG(ae.Rating),1) AS AgencyRating,
            COUNT(DISTINCT ae.ExpNum) AS AgencyReviews
     FROM packages p
@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'revie
     } elseif ($rating < 1 || $rating > 5) {
         $reviewError = 'Rating must be 1–5.';
     } else {
-        $revNum = rand(2000, 9999);
+        $revNum = rand(100000, 999999);
         $db->prepare("INSERT INTO reviews (TravID,TOID,RevNum,Description,Rating) VALUES (?,?,?,?,?)")
            ->execute([$u['sub_id'], $toid, $revNum, $desc, $rating]);
         $reviewSuccess = 'Review submitted!';
@@ -162,7 +162,7 @@ $typeIcon = ['ATTRACTION'=>'🎡','ACCOMMODATION'=>'🏨','RESTAURANT'=>'🍽️
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title><?= htmlspecialchars($pkg['Name']) ?> – Tripistry</title>
-<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="css/style.css">
 <style>
 .detail-hero {
   background: linear-gradient(135deg, var(--teal-d), var(--teal));
@@ -182,9 +182,12 @@ $typeIcon = ['ATTRACTION'=>'🎡','ACCOMMODATION'=>'🏨','RESTAURANT'=>'🍽️
 </style>
 </head>
 <body>
-<?php include '../traveller/nav_traveller.php'; ?>
- 
+<?php include __DIR__ . '/nav_traveller.php'; ?>
+
 <div class="container page-wrap">
+  <div class="sidebar-layout">
+    <?php include __DIR__ . '/sidebar_traveller.php'; ?>
+    <div>
  
   <!-- Hero -->
   <div class="detail-hero" data-icon="✈️">
@@ -378,9 +381,11 @@ $typeIcon = ['ATTRACTION'=>'🎡','ACCOMMODATION'=>'🏨','RESTAURANT'=>'🍽️
       </div>
     </div>
  
+    </div>
+    </div>
   </div>
 </div>
- 
+
 <script>
 function initStars(containerId, inputId) {
   const stars = document.querySelectorAll('#' + containerId + ' span');
