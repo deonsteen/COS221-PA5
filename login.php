@@ -67,5 +67,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
+  
+        if ($action === 'register') {
+        $username = trim($_POST['username'] ?? '');
+        $password = $_POST['password'] ?? '';
+        $email    = trim($_POST['email'] ?? '');
+        $role     = in_array($_POST['role'] ?? '', ['traveller','agency']) ? $_POST['role'] : 'traveller';
+        $name     = trim($_POST['name'] ?? '');
+        $dob      = trim($_POST['dob'] ?? '');
  
+        if (!$username || !$password || !$email) {
+            $error = 'Username, email and password are required.';
+        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $error = 'Please enter a valid email address.';
+        } elseif (strlen($password) < 8) {
+            $error = 'Password must be at least 8 characters.';
+        } elseif ($role === 'traveller' && !$dob) {
+            $error = 'Date of birth is required for travellers.';
+        } elseif ($role === 'agency' && !$name) {
+            $error = 'Agency name is required.';
+        } else {
+            $db = null;
+            try {
+                $db   = getDB();
+                $hash = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+                $db->beginTransaction();
+                $stmt = $db->prepare("INSERT INTO users (Username, Password) VALUES (?, ?)");
+                $stmt->execute([$username, $hash]);
+                $uid = $db->lastInsertId();
+                $db->prepare("INSERT INTO contactdetails (UserID, Email) VALUES (?, ?)")
+                   ->execute([$uid, $email]);
+                if ($role === 'traveller') {
+                    $db->prepare("INSERT INTO travellers (UserID, DoB) VALUES (?, ?)")
+                       ->execute([$uid, $dob]);
+                } else {
+                    $db->prepare("INSERT INTO agencies (UserID, Name) VALUES (?, ?)")
+                       ->execute([$uid, $name]);
+                }
+                $db->commit();
+                $success = 'Account created successfully! Please sign in.';
+                $mode    = 'login';
+            } catch (PDOException $e) {
+                if ($db) $db->rollBack();
+                $error = 'DB Error: ' . $e->getMessage();
+            }
+        }
+    }
+
 }
