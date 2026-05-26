@@ -978,6 +978,21 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `Username` (`Username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+
+
+
+CREATE TABLE IF NOT EXISTS restaurant_bookings (
+  BookingID   INT AUTO_INCREMENT PRIMARY KEY,
+  TravID      INT NOT NULL,
+  ResID       INT NOT NULL,
+  BookingDate DATE NOT NULL,
+  BookingTime TIME NOT NULL,
+  PartySize   INT NOT NULL DEFAULT 1,
+  CreatedAt   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (TravID) REFERENCES travellers(TravID),
+  FOREIGN KEY (ResID)  REFERENCES restaurants(ResID)
+);
+
 -- Dumping data for table tripistry.users: ~0 rows (approximately)
 REPLACE INTO `users` (`UserID`, `Username`, `Password`) VALUES
 	(1, 'james_olivier', '$2y$10$abc1hashedpassword1'),
