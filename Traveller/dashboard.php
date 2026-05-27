@@ -7,7 +7,7 @@ $u = currentUser();
 $db = getDB();
 
 // Stats
-$bookings = $db->prepare("SELECT COUNT(*) FROM holidays h JOIN clients c ON h.ClientID=c.ClientID WHERE h.TravID=?");
+$bookings = $db->prepare("SELECT COUNT(*) FROM holidays h JOIN clients c ON h.ClientID=c.ClientID WHERE h.ClientID=?");
 $bookings->execute([$u['sub_id']]);
 $bookingCount = $bookings->fetchColumn();
 
@@ -24,7 +24,7 @@ $recent = $db->prepare("
     JOIN packages p  ON h.PackID   = p.PackID
     JOIN packinfo pi ON pi.PackID  = p.PackID
     JOIN agencies ag ON p.AgentID  = ag.AgentID
-    WHERE h.TravID = ?
+    WHERE h.ClientID = ?
     ORDER BY h.HolidayID DESC LIMIT 5
 ");
 $recent->execute([$u['sub_id']]);

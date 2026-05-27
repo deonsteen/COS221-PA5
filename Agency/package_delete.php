@@ -9,7 +9,7 @@ error_reporting(E_ALL);
 session_start();
 
 // ── Auth guard ──
-if (!isset($_SESSION['AgentID']) || $_SESSION['role'] !== 'agency') {
+if (!isset($_SESSION['sub_id']) || $_SESSION['role'] !== 'agency') {
     header('Location: ../login.php');
     exit;
 }
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 require_once '../db.php';
 $pdo = getDB();
 
-$agentID = (int) $_SESSION['AgentID'];
+$agentID = (int) $_SESSION['sub_id'];
 $packID  = isset($_POST['PackID']) ? (int) $_POST['PackID'] : 0;
 
 if ($packID <= 0) {
