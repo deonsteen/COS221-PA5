@@ -1,6 +1,7 @@
 
-CREATE DATABASE IF NOT EXISTS `tripistry`
+CREATE DATABASE IF NOT EXISTS `tripistry`;
 USE `tripistry`;
+SET FOREIGN_KEY_CHECKS = 0;
 
 CREATE TABLE IF NOT EXISTS `accomodation` (
   `AccID` int(11) NOT NULL AUTO_INCREMENT,
@@ -955,3 +956,4 @@ REPLACE INTO `users` (`UserID`, `Username`, `Password`) VALUES
 	(28, 'nomad_pathways', '$2y$10$ag8hashedpassword8'),
 	(29, 'velvet_voyages', '$2y$10$ag9hashedpassword9'),
 	(30, 'peak_adventures', '$2y$10$ag10hashedpasswrd');
+SET FOREIGN_KEY_CHECKS = 1;
