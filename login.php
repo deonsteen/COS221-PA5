@@ -67,8 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
- 
-    if ($action === 'register') {
+  
+        if ($action === 'register') {
         $username = trim($_POST['username'] ?? '');
         $password = $_POST['password'] ?? '';
         $email    = trim($_POST['email'] ?? '');
@@ -113,7 +113,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
+
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -125,7 +127,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
-<!-- LEFT — slideshow with Tripistry brand overlay -->
 <div class="hero">
 
   <div class="slide active">
@@ -170,7 +171,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 </div>
 
-<!-- RIGHT — form -->
 <div class="form-side">
   <div class="form-wrap">
 
@@ -272,3 +272,4 @@ setInterval(() => goTo(current + 1), 5000);
 </script>
 </body>
 </html>
+

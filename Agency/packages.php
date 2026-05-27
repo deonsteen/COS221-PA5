@@ -2,7 +2,7 @@
 // Agency/packages.php
 session_start();
 
-if (!isset($_SESSION['sub_id']) || $_SESSION['role'] !== 'agency') {
+if (!isset($_SESSION['AgentID']) || $_SESSION['role'] !== 'agency') {
     header('Location: ../login.php');
     exit;
 }
@@ -10,7 +10,7 @@ if (!isset($_SESSION['sub_id']) || $_SESSION['role'] !== 'agency') {
 require_once '../db.php';
 $pdo = getDB();
 
-$agentID    = (int) $_SESSION['sub_id'];
+$agentID    = (int) $_SESSION['AgentID'];
 $stmtName = $pdo->prepare("SELECT Name FROM agencies WHERE AgentID = ?");
 $stmtName->execute([$agentID]);
 $agencyName = htmlspecialchars($stmtName->fetchColumn() ?: 'Your Agency');

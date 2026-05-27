@@ -1,25 +1,7 @@
--- --------------------------------------------------------
--- Host:                         127.0.0.1
--- Server version:               12.2.2-MariaDB - MariaDB Server
--- Server OS:                    Win64
--- HeidiSQL Version:             12.14.0.7165
--- --------------------------------------------------------
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET NAMES utf8 */;
-/*!50503 SET NAMES utf8mb4 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-
--- Dumping database structure for tripistry
-CREATE DATABASE IF NOT EXISTS `tripistry` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */;
+CREATE DATABASE IF NOT EXISTS `tripistry`
 USE `tripistry`;
 
--- Dumping structure for table tripistry.accomodation
 CREATE TABLE IF NOT EXISTS `accomodation` (
   `AccID` int(11) NOT NULL AUTO_INCREMENT,
   `TOID` int(11) NOT NULL,
@@ -29,7 +11,6 @@ CREATE TABLE IF NOT EXISTS `accomodation` (
   CONSTRAINT `fk_acc_to` FOREIGN KEY (`TOID`) REFERENCES `tourism_offerings` (`TOID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.accomodation: ~10 rows (approximately)
 REPLACE INTO `accomodation` (`AccID`, `TOID`, `Attribute`) VALUES
 	(1, 11, 'Pool, Spa, Free WiFi, Concierge'),
 	(2, 12, 'Infinity Pool, Jungle View, Yoga Studio'),
@@ -42,7 +23,6 @@ REPLACE INTO `accomodation` (`AccID`, `TOID`, `Attribute`) VALUES
 	(9, 19, 'Beach Access, Spa, Pool, Water Sports'),
 	(10, 20, 'Caldera View, Private Plunge Pool, Breakfast');
 
--- Dumping structure for table tripistry.agencies
 CREATE TABLE IF NOT EXISTS `agencies` (
   `AgentID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
@@ -52,7 +32,6 @@ CREATE TABLE IF NOT EXISTS `agencies` (
   CONSTRAINT `fk_ag_user` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.agencies: ~10 rows (approximately)
 REPLACE INTO `agencies` (`AgentID`, `UserID`, `Name`) VALUES
 	(1, 21, 'Suntrail Travel'),
 	(2, 22, 'Horizons Travel'),
@@ -65,7 +44,6 @@ REPLACE INTO `agencies` (`AgentID`, `UserID`, `Name`) VALUES
 	(9, 29, 'Velvet Voyages'),
 	(10, 30, 'Peak Adventures');
 
--- Dumping structure for table tripistry.agency_experiences
 CREATE TABLE IF NOT EXISTS `agency_experiences` (
   `ExpNum` int(11) NOT NULL AUTO_INCREMENT,
   `AgentID` int(11) NOT NULL,
@@ -79,7 +57,6 @@ CREATE TABLE IF NOT EXISTS `agency_experiences` (
   CONSTRAINT `fk_exp_client` FOREIGN KEY (`ClientID`) REFERENCES `clients` (`ClientID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.agency_experiences: ~30 rows (approximately)
 REPLACE INTO `agency_experiences` (`ExpNum`, `AgentID`, `ClientID`, `Description`, `Rating`) VALUES
 	(1, 1, 1, 'Suntrail handled all our transfers seamlessly. Professional from start to finish.', 5),
 	(2, 1, 3, 'Booking process was smooth and the Paris itinerary was perfect for a couple.', 5),
@@ -112,7 +89,6 @@ REPLACE INTO `agency_experiences` (`ExpNum`, `AgentID`, `ClientID`, `Description
 	(29, 9, 27, 'Velvet Voyages Lisbon package was charming and well priced for the quality.', 4),
 	(30, 10, 30, 'Peak Adventures organised our Prague city break superbly. Great hidden gems tour.', 4);
 
--- Dumping structure for table tripistry.airplanes
 CREATE TABLE IF NOT EXISTS `airplanes` (
   `PlaneID` int(11) NOT NULL AUTO_INCREMENT,
   `PortID` int(11) NOT NULL,
@@ -122,7 +98,6 @@ CREATE TABLE IF NOT EXISTS `airplanes` (
   CONSTRAINT `fk_plane_port` FOREIGN KEY (`PortID`) REFERENCES `airports` (`PortID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.airplanes: ~30 rows (approximately)
 REPLACE INTO `airplanes` (`PlaneID`, `PortID`, `Name`) VALUES
 	(1, 1, 'Boeing 777-300ER'),
 	(2, 2, 'Airbus A320neo'),
@@ -155,7 +130,6 @@ REPLACE INTO `airplanes` (`PlaneID`, `PortID`, `Name`) VALUES
 	(29, 29, 'Airbus A320'),
 	(30, 30, 'Boeing 737-800');
 
--- Dumping structure for table tripistry.airports
 CREATE TABLE IF NOT EXISTS `airports` (
   `PortID` int(11) NOT NULL AUTO_INCREMENT,
   `DestID` int(11) NOT NULL,
@@ -166,7 +140,6 @@ CREATE TABLE IF NOT EXISTS `airports` (
   CONSTRAINT `fk_ap_dest` FOREIGN KEY (`DestID`) REFERENCES `destinations` (`DestID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.airports: ~30 rows (approximately)
 REPLACE INTO `airports` (`PortID`, `DestID`, `Name`, `City`) VALUES
 	(1, 1, 'Charles de Gaulle Airport', 'Paris'),
 	(2, 2, 'Ngurah Rai International Airport', 'Denpasar'),
@@ -199,7 +172,6 @@ REPLACE INTO `airports` (`PortID`, `DestID`, `Name`, `City`) VALUES
 	(29, 29, 'Cairo International Airport', 'Cairo'),
 	(30, 30, 'King Shaka International Airport', 'Durban');
 
--- Dumping structure for table tripistry.attractions
 CREATE TABLE IF NOT EXISTS `attractions` (
   `AttID` int(11) NOT NULL AUTO_INCREMENT,
   `TOID` int(11) NOT NULL,
@@ -211,7 +183,6 @@ CREATE TABLE IF NOT EXISTS `attractions` (
   CONSTRAINT `fk_att_to` FOREIGN KEY (`TOID`) REFERENCES `tourism_offerings` (`TOID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.attractions: ~0 rows (approximately)
 REPLACE INTO `attractions` (`AttID`, `TOID`, `Price`, `TimeOpen`, `TimeClose`) VALUES
 	(1, 1, 280.00, '09:00:00', '23:45:00'),
 	(2, 2, 75.00, '07:00:00', '19:00:00'),
@@ -224,7 +195,6 @@ REPLACE INTO `attractions` (`AttID`, `TOID`, `Price`, `TimeOpen`, `TimeClose`) V
 	(9, 9, 0.00, '06:00:00', '18:00:00'),
 	(10, 10, 200.00, '08:00:00', '17:00:00');
 
--- Dumping structure for table tripistry.clients
 CREATE TABLE IF NOT EXISTS `clients` (
   `ClientID` int(11) NOT NULL AUTO_INCREMENT,
   `TravID` int(11) NOT NULL,
@@ -236,7 +206,6 @@ CREATE TABLE IF NOT EXISTS `clients` (
   CONSTRAINT `fk_cl_trav` FOREIGN KEY (`TravID`) REFERENCES `travellers` (`TravID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.clients: ~0 rows (approximately)
 REPLACE INTO `clients` (`ClientID`, `TravID`, `AgentID`) VALUES
 	(1, 1, 1),
 	(2, 1, 2),
@@ -269,7 +238,6 @@ REPLACE INTO `clients` (`ClientID`, `TravID`, `AgentID`) VALUES
 	(29, 15, 6),
 	(30, 15, 3);
 
--- Dumping structure for table tripistry.contact_numbers
 CREATE TABLE IF NOT EXISTS `contact_numbers` (
   `CDID` int(11) NOT NULL,
   `Number` varchar(20) NOT NULL,
@@ -278,7 +246,6 @@ CREATE TABLE IF NOT EXISTS `contact_numbers` (
   CONSTRAINT `fk_cn_cd` FOREIGN KEY (`CDID`) REFERENCES `contactdetails` (`CDID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.contact_numbers: ~30 rows (approximately)
 REPLACE INTO `contact_numbers` (`CDID`, `Number`, `Type`) VALUES
 	(1, '+27811234001', 'Mobile'),
 	(2, '+27821234002', 'Mobile'),
@@ -321,7 +288,6 @@ CREATE TABLE IF NOT EXISTS `contactdetails` (
   CONSTRAINT `fk_cd_user` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.contactdetails: ~0 rows (approximately)
 REPLACE INTO `contactdetails` (`CDID`, `UserID`, `Email`) VALUES
 	(1, 1, 'james.olivier@gmail.com'),
 	(2, 2, 'priya.naidoo@gmail.com'),
@@ -354,7 +320,6 @@ REPLACE INTO `contactdetails` (`CDID`, `UserID`, `Email`) VALUES
 	(29, 29, 'enquiries@velvetvoyages.co.za'),
 	(30, 30, 'info@peakadventures.co.za');
 
--- Dumping structure for table tripistry.destinations
 CREATE TABLE IF NOT EXISTS `destinations` (
   `DestID` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(100) NOT NULL,
@@ -362,7 +327,6 @@ CREATE TABLE IF NOT EXISTS `destinations` (
   PRIMARY KEY (`DestID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.destinations: ~0 rows (approximately)
 REPLACE INTO `destinations` (`DestID`, `Name`, `City`) VALUES
 	(1, 'Paris', 'Paris'),
 	(2, 'Bali', 'Denpasar'),
@@ -395,7 +359,6 @@ REPLACE INTO `destinations` (`DestID`, `Name`, `City`) VALUES
 	(29, 'Cairo', 'Cairo'),
 	(30, 'Durban', 'Durban');
 
--- Dumping structure for table tripistry.discounts
 CREATE TABLE IF NOT EXISTS `discounts` (
   `DiscountID` int(11) NOT NULL AUTO_INCREMENT,
   `PackID` int(11) NOT NULL,
@@ -408,7 +371,6 @@ CREATE TABLE IF NOT EXISTS `discounts` (
   CONSTRAINT `chk_discount_dates` CHECK (`To` > `From`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.discounts: ~0 rows (approximately)
 REPLACE INTO `discounts` (`DiscountID`, `PackID`, `From`, `To`, `Details`) VALUES
 	(1, 1, '2026-06-01', '2026-06-30', '10% early bird discount for June bookings'),
 	(2, 2, '2026-06-01', '2026-07-15', '15% off Bali package booked in June'),
@@ -441,7 +403,6 @@ REPLACE INTO `discounts` (`DiscountID`, `PackID`, `From`, `To`, `Details`) VALUE
 	(29, 29, '2026-11-01', '2026-12-31', '10% off Cairo — winter discovery deal'),
 	(30, 30, '2026-02-01', '2026-03-31', '15% off Kyoto cherry blossom — advance booking');
 
--- Dumping structure for table tripistry.flights
 CREATE TABLE IF NOT EXISTS `flights` (
   `FlightID` int(11) NOT NULL AUTO_INCREMENT,
   `PlaneID` int(11) NOT NULL,
@@ -461,7 +422,6 @@ CREATE TABLE IF NOT EXISTS `flights` (
   CONSTRAINT `chk_flight_times` CHECK (`ArrDateTime` > `DepDateTime`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.flights: ~30 rows (approximately)
 REPLACE INTO `flights` (`FlightID`, `PlaneID`, `DepPortID`, `ArrPortID`, `Class`, `Type`, `DepDateTime`, `ArrDateTime`) VALUES
 	(1, 1, 10, 1, 'Economy', 'Direct', '2026-07-01 08:00:00', '2026-07-01 19:30:00'),
 	(2, 2, 10, 2, 'Economy', 'Connecting', '2026-07-05 06:00:00', '2026-07-05 22:00:00'),
@@ -494,7 +454,6 @@ REPLACE INTO `flights` (`FlightID`, `PlaneID`, `DepPortID`, `ArrPortID`, `Class`
 	(29, 29, 10, 29, 'Economy', 'Connecting', '2026-12-15 06:00:00', '2026-12-15 18:00:00'),
 	(30, 30, 10, 30, 'Economy', 'Direct', '2026-12-20 07:00:00', '2026-12-20 09:00:00');
 
--- Dumping structure for table tripistry.group_discount
 CREATE TABLE IF NOT EXISTS `group_discount` (
   `DiscountID` int(11) NOT NULL,
   `MinSize` int(11) NOT NULL DEFAULT 2,
@@ -502,7 +461,6 @@ CREATE TABLE IF NOT EXISTS `group_discount` (
   CONSTRAINT `fk_grp_disc` FOREIGN KEY (`DiscountID`) REFERENCES `discounts` (`DiscountID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.group_discount: ~15 rows (approximately)
 REPLACE INTO `group_discount` (`DiscountID`, `MinSize`) VALUES
 	(2, 4),
 	(4, 3),
@@ -520,7 +478,6 @@ REPLACE INTO `group_discount` (`DiscountID`, `MinSize`) VALUES
 	(28, 4),
 	(30, 3);
 
--- Dumping structure for table tripistry.holidays
 CREATE TABLE IF NOT EXISTS `holidays` (
   `HolidayID` int(11) NOT NULL AUTO_INCREMENT,
   `ClientID` int(11) NOT NULL,
@@ -538,7 +495,6 @@ CREATE TABLE IF NOT EXISTS `holidays` (
   CONSTRAINT `chk_holiday_dates` CHECK (`To` > `From`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.holidays: ~30 rows (approximately)
 REPLACE INTO `holidays` (`HolidayID`, `ClientID`, `PackID`, `FlightID`, `From`, `To`) VALUES
 	(1, 1, 1, 1, '2026-07-01', '2026-07-06'),
 	(2, 2, 2, 2, '2026-07-05', '2026-07-12'),
@@ -571,7 +527,6 @@ REPLACE INTO `holidays` (`HolidayID`, `ClientID`, `PackID`, `FlightID`, `From`, 
 	(29, 29, 29, 29, '2026-12-15', '2026-12-20'),
 	(30, 30, 30, 28, '2026-04-01', '2026-04-07');
 
--- Dumping structure for table tripistry.individual_discount
 CREATE TABLE IF NOT EXISTS `individual_discount` (
   `DiscountID` int(11) NOT NULL,
   `Limit` int(11) NOT NULL DEFAULT 1,
@@ -579,7 +534,6 @@ CREATE TABLE IF NOT EXISTS `individual_discount` (
   CONSTRAINT `fk_ind_disc` FOREIGN KEY (`DiscountID`) REFERENCES `discounts` (`DiscountID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.individual_discount: ~15 rows (approximately)
 REPLACE INTO `individual_discount` (`DiscountID`, `Limit`) VALUES
 	(1, 1),
 	(3, 1),
@@ -597,7 +551,6 @@ REPLACE INTO `individual_discount` (`DiscountID`, `Limit`) VALUES
 	(27, 1),
 	(29, 1);
 
--- Dumping structure for table tripistry.itinerary
 CREATE TABLE IF NOT EXISTS `itinerary` (
   `ItiID` int(11) NOT NULL AUTO_INCREMENT,
   `InfoID` int(11) NOT NULL,
@@ -610,7 +563,6 @@ CREATE TABLE IF NOT EXISTS `itinerary` (
   CONSTRAINT `fk_iti_info` FOREIGN KEY (`InfoID`) REFERENCES `packinfo` (`InfoID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.itinerary: ~0 rows (approximately)
 REPLACE INTO `itinerary` (`ItiID`, `InfoID`, `Type`, `DateTime`, `Activities`, `Description`) VALUES
 	(1, 1, 'Tour', '2026-07-02 09:00:00', 'Eiffel Tower, Seine River Cruise', 'Guided morning tour of iconic Parisian landmarks.'),
 	(2, 2, 'Leisure', '2026-07-06 10:00:00', 'Rice Terraces, Temple Visits', 'Explore Ubud rice paddies and local temples.'),
@@ -643,7 +595,6 @@ REPLACE INTO `itinerary` (`ItiID`, `InfoID`, `Type`, `DateTime`, `Activities`, `
 	(29, 29, 'Tour', '2026-12-16 07:00:00', 'Pyramids of Giza, Sphinx, Museum', 'Full day tour of ancient Egyptian wonders.'),
 	(30, 30, 'Tour', '2026-04-01 08:00:00', 'Arashiyama Bamboo, Fushimi Inari', 'Kyoto cherry blossom season temple walk.');
 
--- Dumping structure for table tripistry.menu_items
 CREATE TABLE IF NOT EXISTS `menu_items` (
   `ResID` int(11) NOT NULL,
   `Item` varchar(100) NOT NULL,
@@ -651,8 +602,6 @@ CREATE TABLE IF NOT EXISTS `menu_items` (
   PRIMARY KEY (`ResID`,`Item`),
   CONSTRAINT `fk_menu_res` FOREIGN KEY (`ResID`) REFERENCES `restaurants` (`ResID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Dumping data for table tripistry.menu_items: ~0 rows (approximately)
 REPLACE INTO `menu_items` (`ResID`, `Item`, `Price`) VALUES
 	(1, 'Café Noisette', 55.00),
 	(1, 'Croissant au Beurre', 85.00),
@@ -685,7 +634,6 @@ REPLACE INTO `menu_items` (`ResID`, `Item`, `Price`) VALUES
 	(10, 'Line Fish', 480.00),
 	(10, 'Springbok Tartare', 380.00);
 
--- Dumping structure for table tripistry.packages
 CREATE TABLE IF NOT EXISTS `packages` (
   `PackID` int(11) NOT NULL AUTO_INCREMENT,
   `AgentID` int(11) NOT NULL,
@@ -695,7 +643,6 @@ CREATE TABLE IF NOT EXISTS `packages` (
   CONSTRAINT `fk_pack_agent` FOREIGN KEY (`AgentID`) REFERENCES `agencies` (`AgentID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.packages: ~30 rows (approximately)
 REPLACE INTO `packages` (`PackID`, `AgentID`, `Price`) VALUES
 	(1, 1, 28500.00),
 	(2, 1, 19500.00),
@@ -728,7 +675,6 @@ REPLACE INTO `packages` (`PackID`, `AgentID`, `Price`) VALUES
 	(29, 10, 33000.00),
 	(30, 10, 51000.00);
 
--- Dumping structure for table tripistry.packinfo
 CREATE TABLE IF NOT EXISTS `packinfo` (
   `InfoID` int(11) NOT NULL AUTO_INCREMENT,
   `PackID` int(11) NOT NULL,
@@ -741,7 +687,6 @@ CREATE TABLE IF NOT EXISTS `packinfo` (
   CONSTRAINT `fk_pi_pack` FOREIGN KEY (`PackID`) REFERENCES `packages` (`PackID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.packinfo: ~0 rows (approximately)
 REPLACE INTO `packinfo` (`InfoID`, `PackID`, `Name`, `Destination`, `Duration`, `Class`) VALUES
 	(1, 1, 'Paris Romantic Escape', 'Paris, France', 5, 'Premium'),
 	(2, 2, 'Bali Bliss Retreat', 'Bali, Indonesia', 7, 'Standard'),
@@ -774,7 +719,6 @@ REPLACE INTO `packinfo` (`InfoID`, `PackID`, `Name`, `Destination`, `Duration`, 
 	(29, 29, 'Cairo and Pyramids Tour', 'Cairo, Egypt', 5, 'Premium'),
 	(30, 30, 'Kyoto Cherry Blossom Tour', 'Kyoto, Japan', 6, 'Luxury');
 
--- Dumping structure for table tripistry.restaurants
 CREATE TABLE IF NOT EXISTS `restaurants` (
   `ResID` int(11) NOT NULL AUTO_INCREMENT,
   `TOID` int(11) NOT NULL,
@@ -785,7 +729,6 @@ CREATE TABLE IF NOT EXISTS `restaurants` (
   CONSTRAINT `fk_res_to` FOREIGN KEY (`TOID`) REFERENCES `tourism_offerings` (`TOID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.restaurants: ~10 rows (approximately)
 REPLACE INTO `restaurants` (`ResID`, `TOID`, `TimeOpen`, `TimeClose`) VALUES
 	(1, 21, '07:00:00', '23:00:00'),
 	(2, 22, '11:00:00', '22:00:00'),
@@ -798,7 +741,6 @@ REPLACE INTO `restaurants` (`ResID`, `TOID`, `TimeOpen`, `TimeClose`) VALUES
 	(9, 29, '12:00:00', '22:00:00'),
 	(10, 30, '12:00:00', '22:00:00');
 
--- Dumping structure for table tripistry.reviews
 CREATE TABLE IF NOT EXISTS `reviews` (
   `RevID` int(11) NOT NULL AUTO_INCREMENT,
   `TravID` int(11) NOT NULL,
@@ -813,7 +755,6 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   CONSTRAINT `fk_rev_trav` FOREIGN KEY (`TravID`) REFERENCES `travellers` (`TravID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.reviews: ~30 rows (approximately)
 REPLACE INTO `reviews` (`RevID`, `TravID`, `TOID`, `RevNum`, `Description`, `Rating`) VALUES
 	(1, 1, 1, 1001, 'The Eiffel Tower at night is breathtaking. Absolutely worth every cent.', 5),
 	(2, 2, 2, 1002, 'Tanah Lot temple was magical, especially at sunset. Highly recommend.', 5),
@@ -846,7 +787,6 @@ REPLACE INTO `reviews` (`RevID`, `TravID`, `TOID`, `RevNum`, `Description`, `Rat
 	(29, 9, 29, 1029, 'Quay Restaurant has stunning harbour views and beautiful creative cuisine.', 4),
 	(30, 10, 30, 1030, 'The Pot Luck Club is a Cape Town classic. Sharing plates are brilliant.', 4);
 
--- Dumping structure for table tripistry.rooms
 CREATE TABLE IF NOT EXISTS `rooms` (
   `RoomNo` int(11) NOT NULL,
   `AccID` int(11) NOT NULL,
@@ -858,7 +798,6 @@ CREATE TABLE IF NOT EXISTS `rooms` (
   CONSTRAINT `fk_room_acc` FOREIGN KEY (`AccID`) REFERENCES `accomodation` (`AccID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.rooms: ~0 rows (approximately)
 REPLACE INTO `rooms` (`RoomNo`, `AccID`, `Bed`, `Bath`, `Price`) VALUES
 	(101, 1, 'Double', 1, 3200.00),
 	(102, 1, 'King', 1, 4500.00),
@@ -891,7 +830,6 @@ REPLACE INTO `rooms` (`RoomNo`, `AccID`, `Bed`, `Bath`, `Price`) VALUES
 	(1002, 10, 'King', 1, 13000.00),
 	(1003, 10, 'Suite', 1, 22000.00);
 
--- Dumping structure for table tripistry.tourism_offerings
 CREATE TABLE IF NOT EXISTS `tourism_offerings` (
   `TOID` int(11) NOT NULL AUTO_INCREMENT,
   `DestID` int(11) NOT NULL,
@@ -903,7 +841,6 @@ CREATE TABLE IF NOT EXISTS `tourism_offerings` (
   CONSTRAINT `fk_to_dest` FOREIGN KEY (`DestID`) REFERENCES `destinations` (`DestID`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.tourism_offerings: ~0 rows (approximately)
 REPLACE INTO `tourism_offerings` (`TOID`, `DestID`, `Name`, `City`, `Type`) VALUES
 	(1, 1, 'Eiffel Tower', 'Paris', 'ATTRACTION'),
 	(2, 2, 'Tanah Lot Temple', 'Tabanan', 'ATTRACTION'),
@@ -936,7 +873,6 @@ REPLACE INTO `tourism_offerings` (`TOID`, `DestID`, `Name`, `City`, `Type`) VALU
 	(29, 9, 'Quay Restaurant', 'Sydney', 'RESTAURANT'),
 	(30, 10, 'The Pot Luck Club', 'Johannesburg', 'RESTAURANT');
 
--- Dumping structure for table tripistry.travellers
 CREATE TABLE IF NOT EXISTS `travellers` (
   `TravID` int(11) NOT NULL AUTO_INCREMENT,
   `UserID` int(11) NOT NULL,
@@ -946,7 +882,6 @@ CREATE TABLE IF NOT EXISTS `travellers` (
   CONSTRAINT `fk_trav_user` FOREIGN KEY (`UserID`) REFERENCES `users` (`UserID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dumping data for table tripistry.travellers: ~0 rows (approximately)
 REPLACE INTO `travellers` (`TravID`, `UserID`, `DoB`) VALUES
 	(1, 1, '1995-03-14'),
 	(2, 2, '1998-07-22'),
@@ -969,7 +904,6 @@ REPLACE INTO `travellers` (`TravID`, `UserID`, `DoB`) VALUES
 	(19, 19, '2000-12-04'),
 	(20, 20, '1989-04-27');
 
--- Dumping structure for table tripistry.users
 CREATE TABLE IF NOT EXISTS `users` (
   `UserID` int(11) NOT NULL AUTO_INCREMENT,
   `Username` varchar(50) NOT NULL,
@@ -977,9 +911,6 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`UserID`),
   UNIQUE KEY `Username` (`Username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
-
 
 CREATE TABLE IF NOT EXISTS restaurant_bookings (
   BookingID   INT AUTO_INCREMENT PRIMARY KEY,
@@ -993,7 +924,6 @@ CREATE TABLE IF NOT EXISTS restaurant_bookings (
   FOREIGN KEY (ResID)  REFERENCES restaurants(ResID)
 );
 
--- Dumping data for table tripistry.users: ~0 rows (approximately)
 REPLACE INTO `users` (`UserID`, `Username`, `Password`) VALUES
 	(1, 'james_olivier', '$2y$10$abc1hashedpassword1'),
 	(2, 'priya_naidoo', '$2y$10$abc2hashedpassword2'),
@@ -1025,9 +955,3 @@ REPLACE INTO `users` (`UserID`, `Username`, `Password`) VALUES
 	(28, 'nomad_pathways', '$2y$10$ag8hashedpassword8'),
 	(29, 'velvet_voyages', '$2y$10$ag9hashedpassword9'),
 	(30, 'peak_adventures', '$2y$10$ag10hashedpasswrd');
-
-/*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
-/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
-/*!40014 SET FOREIGN_KEY_CHECKS=IFNULL(@OLD_FOREIGN_KEY_CHECKS, 1) */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40111 SET SQL_NOTES=IFNULL(@OLD_SQL_NOTES, 1) */;
