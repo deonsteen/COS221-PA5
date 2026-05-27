@@ -3,6 +3,9 @@
 // This file has no UI — it only handles the POST request from the delete modal
 // and redirects back to packages.php with a success or error message.
 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 
 // ── Auth guard ──
